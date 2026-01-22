@@ -28,14 +28,11 @@ async function startServer() {
     // CRUD Routes
     // --------------------
 
-    // GET all products (async/await) 
-    
+    // GET all products (async/await)    
     app.get("/api/products", async (req, res) => {
       try {
         const [rows] = await db.query("SELECT * FROM products");
-
         console.log(rows);
-
         res.json(rows);
         
           } catch (err) {
@@ -76,15 +73,14 @@ app.get("/api/products", (req, res) => {
     app.post("/api/products", async (req, res) => {
       try {
         const { title, description, price } = req.body;
-
+        console.log(title, description, price);
         const [result] = await db.query(
           "INSERT INTO products (title, description, price) VALUES (?, ?, ?)",
           [title, description, price]
         );
-
+        console.log(result);
         res.status(201).json({
-          message: "Product created",
-          id: result.insertId,
+          id: result.insertId
         });
       } catch (err) {
         console.error(err);
@@ -98,10 +94,15 @@ app.get("/api/products", (req, res) => {
         const { id } = req.params;
         const { title, price, description } = req.body;
 
+        console.log(id);
+        console.log(title, price, description)
+
         const [result] = await db.query(
           "UPDATE products SET title = ?, price = ?, description = ? WHERE id = ?",
           [title, price, description, id]
         );
+
+        console.log(result);
 
         if (result.affectedRows === 0) {
           return res.status(404).json({ message: "Product not found" });
@@ -118,17 +119,20 @@ app.get("/api/products", (req, res) => {
     app.delete("/api/products/:id", async (req, res) => {
       try {
         const { id } = req.params;
-
+        console.log(id);
         const [result] = await db.query(
           "DELETE FROM products WHERE id = ?",
           [id]
         );
+
+        console.log(result);
 
         if (result.affectedRows === 0) {
           return res.status(404).json({ message: "Product not found" });
         }
 
         res.sendStatus(204);
+        console.log(res);
       } catch (err) {
         console.error(err);
         res.status(500).json({ error: err.message });

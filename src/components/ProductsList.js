@@ -1,5 +1,6 @@
 export default function ProductsList({ products, setProducts }) {
   console.log(products);
+  
   const updateProduct = async (product) => {
     const newTitle = prompt("New title:", product.title);
     const newPrice = prompt("New price:", product.price);
@@ -27,6 +28,8 @@ export default function ProductsList({ products, setProducts }) {
 
   const deleteProduct = async (id) => {
     if (!window.confirm("Delete this product?")) return;
+
+    console.log(id);
 
     await fetch(`http://localhost:5000/api/products/${id}`, { method: "DELETE" });
 
